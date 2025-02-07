@@ -3,10 +3,11 @@ const FormData = require("form-data");
 const { User ,Chat} = require("../models"); 
 const {getLastSequence} = require("../helper/helper");
 exports.start = async (req, res) => {
-  const { nama, age, gender } = req.body; 
+  const { message } = req.body; 
 
   try {
-    
+    const [nama, age, gender] = message.split(/\s*-\s*/);
+
     if (!nama || !age || !gender) {
       return res.status(400).json({
         success: false,
@@ -17,9 +18,6 @@ exports.start = async (req, res) => {
     const user = new User({ name: nama, age, gender });
     await user.save();
     const lastSequence = await getLastSequence(user._id);
-    console.log(lastSequence);
-
-
     const chat = new Chat({
       userId: user._id,
       message: `Nama: ${nama}, Umur: ${age}, Gender: ${gender}`,
