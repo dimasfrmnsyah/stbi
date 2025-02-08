@@ -7,8 +7,8 @@ exports.start = async (req, res) => {
   const { message } = req.body; 
 
   try {
-    const [nama, age, gender] = message.split(/\s*-\s*/);
-
+    const [nama, age, genderTemp] = message.split(/\s*-\s*/);
+    let gender = genderTemp.toUpperCase();
     if (!nama || !age || !gender) {
       return res.status(400).json({
         success: false,
@@ -25,7 +25,6 @@ exports.start = async (req, res) => {
       response: response,
       sequence: lastSequence
     });
-
     await chat.save();
     return res.status(200).json({
       success: true,
