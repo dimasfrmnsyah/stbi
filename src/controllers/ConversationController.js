@@ -1,7 +1,8 @@
 const axios = require("axios");
 const FormData = require("form-data");
 const { User ,Chat} = require("../models"); 
-const {getLastSequence} = require("../helper/helper");
+const {getLastSequence,findResponseBySequence} = require("../helper/helper");
+
 exports.start = async (req, res) => {
   const { message } = req.body; 
 
@@ -14,14 +15,14 @@ exports.start = async (req, res) => {
         message: "Semua field (nama, age, gender) wajib diisi.",
       });
     }
-
     const user = new User({ name: nama, age, gender });
     await user.save();
     const lastSequence = await getLastSequence(user._id);
+    const response = await findResponseBySequence(lastSequence,nama)
     const chat = new Chat({
       userId: user._id,
       message: `Nama: ${nama}, Umur: ${age}, Gender: ${gender}`,
-      response: "Input chat sukses",
+      response: response,
       sequence: lastSequence
     });
 
