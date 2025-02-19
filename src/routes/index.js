@@ -7,4 +7,6 @@ const ConversationController = require('../controllers/ConversationController')
 module.exports = function routes(app) {
 	app.use('/api', router)
 	router.post('/start', ConversationController.start)
+	router.post('/proses/:id', ConversationController.proses)
+
 }
